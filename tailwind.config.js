@@ -5,13 +5,13 @@ export default {
 		colors: {
 			transparent: 'transparent',
 			current: 'currentColor',
-			foreground: '#bdbdbd',
-			background: '#080808',
-			primary: '#cf87e8',
-			secondary: '#80a0ff',
-			accent: '#ff5189'
+			text: 'var(--text)',
+			background: 'var(--background)',
+			primary: 'var(--primary)',
+			secondary: 'var(--secondary)',
+			accent: 'var(--accent)'
 		},
 		extend: {}
 	},
-	plugins: []
+	plugins: ['@tailwindcss/typography']
 };

@@ -1,20 +1,16 @@
 <script lang="ts">
 	import Linkedin from 'lucide-svelte/icons/linkedin';
 	import Github from 'lucide-svelte/icons/github';
-	import { Sun } from 'lucide-svelte';
 	import type { Component } from 'svelte';
 
 	import { page } from '$app/stores';
+	import ThemeButton from '$lib/components/ThemeButton.svelte';
 	// eslint-disable-next-line svelte/valid-compile
 	const path = $page.url.pathname;
 </script>
 
 {#snippet navLink(active: boolean, href: string, itemBody: string | Component)}
-	<li
-		class={active
-			? 'text-primary font-bold m-3 transition-colors'
-			: 'm-3 hover:text-primary transition-colors'}
-	>
+	<li class={active ? 'text-primary font-bold m-3' : 'm-3 hover:text-primary'}>
 		<a {href}>
 			{#if typeof itemBody === 'string'}
 				{itemBody}
@@ -37,7 +33,7 @@
 					{@render navLink(false, 'https://youtube.com', Linkedin)}
 				</ul>
 			</nav>
-			<Sun />
+			<ThemeButton />
 		</header>
 	</div>
 </div>

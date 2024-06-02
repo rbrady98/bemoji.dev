@@ -5,6 +5,22 @@
 @layer base {
 	html {
 		@apply bg-background;
-		@apply text-foreground;
+		@apply text-text;
+		@apply transition-colors;
+	}
+
+	:root {
+		--text: #424242;
+		--background: #f7f7f7;
+		--primary: #601778;
+		--secondary: #002080;
+		--accent: #ad0037;
+	}
+	.dark {
+		--text: #bdbdbd;
+		--background: #080808;
+		--primary: #d087e8;
+		--secondary: #809fff;
+		--accent: #ff5289;
 	}
 }
