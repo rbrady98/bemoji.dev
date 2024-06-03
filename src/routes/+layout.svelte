@@ -1,4 +1,5 @@
 <script>
+	import NavBar from '$lib/components/NavBar.svelte';
 	import '../app.css';
 
 	let { children } = $props();
@@ -8,4 +9,8 @@
 	<title>🅱️.dev</title>
 </svelte:head>
 
-{@render children()}
+<NavBar />
+
+<main class="pt-24 max-w-5xl mx-auto">
+	{@render children()}
+</main>
