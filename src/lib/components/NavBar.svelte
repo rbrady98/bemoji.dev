@@ -5,12 +5,10 @@
 
 	import { page } from '$app/stores';
 	import ThemeButton from '$lib/components/ThemeButton.svelte';
-	// eslint-disable-next-line svelte/valid-compile
-	const path = $page.url.pathname;
 </script>
 
-{#snippet navLink(active: boolean, href: string, itemBody: string | Component)}
-	<li class={active ? 'text-primary font-bold m-3' : 'm-3 hover:text-primary'}>
+{#snippet navLink(href: string, itemBody: string | Component)}
+	<li class={$page.url.pathname === href ? 'text-accent font-bold m-3' : 'm-3 hover:opacity-60'}>
 		<a {href}>
 			{#if typeof itemBody === 'string'}
 				{itemBody}
@@ -25,12 +23,12 @@
 	<div class="mx-auto max-w-screen-lg w-full">
 		<header class="flex items-center h-16 justify-between">
 			<nav class="flex items-baseline">
-				<a href="/" class="text-2xl text-primary font-semibold mr-5">Rian Brady</a>
+				<a href="/" class="text-xl text-primary font-semibold mr-5">🅱️</a>
 				<ul class="flex">
-					{@render navLink(path === '/blog', 'https://youtube.com', 'Blog')}
-					{@render navLink(path === '/resume', 'https://youtube.com', 'Resume')}
-					{@render navLink(false, 'https://youtube.com', Github)}
-					{@render navLink(false, 'https://youtube.com', Linkedin)}
+					{@render navLink('/blog', 'Blog')}
+					{@render navLink('/resume', 'Resume')}
+					{@render navLink('https://youtube.com', Github)}
+					{@render navLink('https://youtube.com', Linkedin)}
 				</ul>
 			</nav>
 			<ThemeButton />

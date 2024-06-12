@@ -1,10 +1,12 @@
 import type { Component } from 'svelte';
 
-export type MarkdownPost = {
+export type Post = {
 	metadata: {
 		title: string;
-		publishedAt: string;
 		summary: string;
+		categories: string[];
+		publishedAt: string;
+		published: boolean;
 	};
 	default: Component;
 };

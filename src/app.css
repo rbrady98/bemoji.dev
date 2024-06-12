@@ -3,24 +3,29 @@
 @tailwind utilities;
 
 @layer base {
+	:root {
+		--text: 66 66 66;
+		--background: 247 247 247;
+		--primary: 96 23 120;
+		--secondary: 0 32 128;
+		--accent: 173 0 55;
+	}
+
 	html {
 		@apply bg-background;
 		@apply text-text;
 		@apply transition-colors;
 	}
 
-	:root {
-		--text: #424242;
-		--background: #f7f7f7;
-		--primary: #601778;
-		--secondary: #002080;
-		--accent: #ad0037;
+	body {
+		font-family: 'Lato', sans-serif;
 	}
+
 	.dark {
-		--text: #bdbdbd;
-		--background: #080808;
-		--primary: #d087e8;
-		--secondary: #809fff;
-		--accent: #ff5289;
+		--text: 189 189 189;
+		--background: 8 8 8;
+		--primary: 208 135 232;
+		--secondary: 128 159 255;
+		--accent: 255 82 137;
 	}
 }

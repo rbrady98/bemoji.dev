@@ -5,7 +5,7 @@
 	import { themeToggle } from '$lib/stores/theme.svelte';
 </script>
 
-<div class="rounded-lg hover:bg-foreground/20 p-1" onclick={themeToggle.toggle}>
+<div class="rounded-lg p-1 hover:bg-accent/20" onclick={themeToggle.toggle}>
 	{#key themeToggle.isDark}
 		<div in:fly={{ y: 20 }}>
 			{#if themeToggle.isDark}
