@@ -1,6 +1,6 @@
 ---
-title: Hello world
-summary: The first post on my new blog
+title: Learning about CPUs by writing a Gameboy Emulator
+summary: At the crossroads of making games, learning about CPUs and Go there is the will to create a gameboy emulator
 publishedAt: "2024-05-01"
 published: true
 ---

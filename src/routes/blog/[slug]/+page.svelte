@@ -8,6 +8,6 @@
 <h3>
 	{metadata.publishedAt}
 </h3>
-<article class="prose dark:prose-invert p-4 max-w-none">
+<article class="prose dark:prose-invert max-w-none">
 	<Post />
 </article>

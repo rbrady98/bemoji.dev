@@ -12,6 +12,6 @@
 
 <NavBar />
 
-<main class="pt-12 max-w-5xl mx-auto">
+<main class="pt-12 max-w-5xl mx-auto px-4">
 	{@render children()}
 </main>
