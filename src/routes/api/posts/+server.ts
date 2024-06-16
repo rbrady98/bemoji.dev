@@ -10,12 +10,12 @@ export const GET = async () => {
 
 	const posts: APIPost[] = [];
 	for (const path in paths) {
-		let slug = path.split('/').at(-1)?.replace('.md', '');
+		const slug = path.split('/').at(-1)?.replace('.md', '');
 		if (!slug) {
 			continue;
 		}
 
-		slug = 'blog/' + slug;
+		//slug = 'blog/' + slug;
 
 		const post = { slug, ...paths[path].metadata };
 		post.published && posts.push(post);

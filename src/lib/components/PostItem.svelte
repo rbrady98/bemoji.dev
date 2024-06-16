@@ -6,7 +6,7 @@
 </script>
 
 <a
-	href={post.slug}
+	href={`/blog/${post.slug}`}
 	class="flex flex-col my-12 p-2 bg-gradient-to-r from-accent via-primary to-secondary bg-[length:100%_2px] bg-no-repeat bg-bottom gap-2"
 >
 	<div class="flex items-center">

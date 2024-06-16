@@ -20,7 +20,7 @@
 <section class="">
 	{#each data.posts as post}
 		<article class="group mt-10 flex flex-col">
-			<a href={post.slug}>
+			<a href={`/blog/${post.slug}`}>
 				<h1 class="text-2xl font-semibold group-hover:text-secondary">{post.title}</h1>
 				<h1 class="text-lg mt-4">{post.summary}</h1>
 				<div class="flex gap-2 mt-4">
