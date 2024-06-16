@@ -1,17 +1,17 @@
 <script lang="ts">
-	import SquareChevronRight from 'lucide-svelte/icons/square-chevron-right';
-
+	import { page } from '$app/stores';
+	import { SquareChevronRight } from 'lucide-svelte';
 	const { data } = $props();
+
+	const category = $page.params.tag;
 </script>
 
-<h1 class="text-4xl font-bold tracking-tight">Latest</h1>
+<h1 class="text-4xl font-bold tracking-tight">{category}</h1>
 <section>
 	<ul class="mt-10">
 		{#each data.posts as post}
 			<li>
-				<div
-					class="flex flex-col my-12 p-2 bg-gradient-to-r from-accent via-primary to-secondary bg-[length:100%_2px] bg-no-repeat bg-bottom gap-2"
-				>
+				<div class="flex flex-col my-4 p-2 border-b border-b-text/25 gap-2">
 					<div class="flex items-center">
 						<SquareChevronRight class="size-4 stroke-accent" />
 						<a href={post.slug} class="text-xl font-bold ml-2">{post.title}</a>

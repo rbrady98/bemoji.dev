@@ -27,8 +27,8 @@
 				<ul class="flex">
 					{@render navLink('/blog', 'Blog')}
 					{@render navLink('/resume', 'Resume')}
-					{@render navLink('https://youtube.com', Github)}
-					{@render navLink('https://youtube.com', Linkedin)}
+					{@render navLink('https://github.com/rbrady98', Github)}
+					{@render navLink('https://www.linkedin.com/in/rian-brady-866016250/', Linkedin)}
 				</ul>
 			</nav>
 			<ThemeButton />

@@ -10,10 +10,8 @@
 		>
 	</h1>
 	<h3 class="text-lg">I'm a software engineer from Ireland.</h3>
-	<h3 class="text-lg">
-		My interests include working on the command line, the Go programming language and escaping React
-	</h3>
-	<h3 class="text-lg">This is my place to write about things I have learned.</h3>
+	<h3 class="text-lg">Interested in Go, Svelte, Neovim and keyboard-based development</h3>
+	<h3 class="text-lg">Writing about learning, projects and mistakes.</h3>
 </section>
 
 <section class="mt-10">
