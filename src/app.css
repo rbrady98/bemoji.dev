@@ -6,9 +6,9 @@
 	:root {
 		--text: 66 66 66;
 		--background: 247 247 247;
-		--primary: 96 23 120;
-		--secondary: 0 32 128;
-		--accent: 173 0 55;
+		--primary: 208 135 232;
+		--secondary: 128 159 255;
+		--accent: 255 82 137;
 	}
 
 	html {

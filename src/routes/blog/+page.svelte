@@ -1,25 +1,36 @@
 <script lang="ts">
-	import SquareChevronRight from 'lucide-svelte/icons/square-chevron-right';
+	import PostItem from '$lib/components/PostItem.svelte';
 
 	const { data } = $props();
+
+	const categories = data.posts.reduce<string[]>((acc, curr) => {
+		acc.push(...curr.categories);
+		return acc;
+	}, []);
 </script>
 
-<h1 class="text-4xl font-bold tracking-tight">Latest</h1>
-<section>
-	<ul class="mt-10">
-		{#each data.posts as post}
-			<li>
-				<div
-					class="flex flex-col my-12 p-2 bg-gradient-to-r from-accent via-primary to-secondary bg-[length:100%_2px] bg-no-repeat bg-bottom gap-2"
+<div class="flex">
+	<section>
+		<h1 class="text-4xl font-bold tracking-tight">Latest</h1>
+		<ul class="mt-10">
+			{#each data.posts as post}
+				<li>
+					<PostItem {post} />
+				</li>
+			{/each}
+		</ul>
+	</section>
+	<section>
+		<h1 class="text-4xl font-bold tracking-tight">Categories</h1>
+		<div class="flex flex-wrap gap-3 mt-4">
+			{#each categories as category}
+				<a
+					href={`blog/category/${category}`}
+					class="flex justify-center font-semibold p-1 min-w-12 rounded-md bg-accent/40 transition-transform duration-200 hover:scale-110 hover:bg-accent/60"
 				>
-					<div class="flex items-center">
-						<SquareChevronRight class="size-4 stroke-accent" />
-						<a href={post.slug} class="text-xl font-bold ml-2">{post.title}</a>
-					</div>
-					<p class="text-text/90">{post.summary}</p>
-					<p class="text-right">{post.publishedAt}</p>
-				</div>
-			</li>
-		{/each}
-	</ul>
-</section>
+					{category}
+				</a>
+			{/each}
+		</div>
+	</section>
+</div>

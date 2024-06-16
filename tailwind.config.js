@@ -12,7 +12,20 @@ export default {
 			secondary: 'rgb(var(--secondary) / <alpha-value>)',
 			accent: 'rgb(var(--accent) / <alpha-value>)'
 		},
-		extend: {}
+		extend: {
+			typography: ({ theme }) => ({
+				lg: {
+					css: {
+						'--tw-prose-headings': theme('colors.text')
+					}
+				},
+				invert: {
+					css: {
+						'--tw-prose-headings': theme('colors.text')
+					}
+				}
+			})
+		}
 	},
 	plugins: [require('@tailwindcss/typography')]
 };
