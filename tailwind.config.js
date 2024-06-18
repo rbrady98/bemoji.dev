@@ -13,6 +13,7 @@ export default {
 			accent: 'rgb(var(--accent) / <alpha-value>)'
 		},
 		extend: {
+			// updating prose headers
 			typography: ({ theme }) => ({
 				lg: {
 					css: {
