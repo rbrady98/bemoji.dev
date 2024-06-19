@@ -23,3 +23,5 @@ export const GET = async () => {
 
 	return json(posts);
 };
+
+export const prerender = true;
