@@ -7,7 +7,7 @@
 <div
 	class="flex flex-col gap-4 bg-gradient-to-r from-accent via-primary to-secondary bg-[length:100%_2px] bg-no-repeat bg-bottom"
 >
-	<h1 class="font-semibold text-6xl">{metadata.title}</h1>
+	<h1 class="font-semibold text-4xl">{metadata.title}</h1>
 	<h3 class="mb-2 text-right">
 		{metadata.publishedAt}
 	</h3>

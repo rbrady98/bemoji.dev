@@ -6,10 +6,6 @@
 	let { children } = $props();
 </script>
 
-<svelte:head>
-	<title>🅱️.dev</title>
-</svelte:head>
-
 <NavBar />
 
 <main class="pt-12 max-w-5xl mx-auto px-4">

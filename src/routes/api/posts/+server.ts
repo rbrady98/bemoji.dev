@@ -15,8 +15,6 @@ export const GET = async () => {
 			continue;
 		}
 
-		//slug = 'blog/' + slug;
-
 		const post = { slug, ...paths[path].metadata };
 		post.published && posts.push(post);
 	}

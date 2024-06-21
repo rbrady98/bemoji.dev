@@ -11,9 +11,9 @@
 >
 	<div class="flex items-center">
 		<SquareChevronRight
-			class="size-4 stroke-accent transition-transform group-hover:translate-x-1"
+			class="size-4 stroke-accent transition-transform group-hover:translate-x-1 hidden md:block"
 		/>
-		<h1 class="text-xl font-bold ml-2 group-hover:text-secondary">{post.title}</h1>
+		<h1 class="text-xl font-bold md:ml-2 group-hover:text-secondary">{post.title}</h1>
 	</div>
 	<p class="text-text/90">{post.summary}</p>
 	<p class="text-right">{post.publishedAt}</p>

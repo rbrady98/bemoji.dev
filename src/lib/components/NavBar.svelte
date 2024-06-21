@@ -19,7 +19,7 @@
 	</li>
 {/snippet}
 
-<div class="sticky z-10 top-0 inset-x-0">
+<div class="z-10 top-0 inset-x-0">
 	<div class="mx-auto max-w-screen-lg w-full px-4">
 		<header class="flex items-center h-16 justify-between">
 			<nav class="flex items-baseline">
