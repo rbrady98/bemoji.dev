@@ -15,14 +15,14 @@ const config = {
 			highlight: {
 				highlighter: async (code, lang = 'text') => {
 					const highlighter = await getHighlighter({
-						themes: ['github-dark', 'github-light'],
-						langs: ['javascript', 'typescript', 'go']
+						themes: ['catppuccin-mocha', 'catppuccin-latte'],
+						langs: ['javascript', 'typescript', 'go', 'bash', 'svelte']
 					});
-					await highlighter.loadLanguage('javascript', 'typescript', 'go');
+					await highlighter.loadLanguage('javascript', 'typescript', 'go', 'bash', 'svelte');
 					const html = escapeSvelte(
 						highlighter.codeToHtml(code, {
 							lang,
-							themes: { dark: 'github-dark', light: 'github-light' }
+							themes: { dark: 'catppuccin-mocha', light: 'catppuccin-latte' }
 						})
 					);
 					return `{@html \`${html}\` }`;
