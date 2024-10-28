@@ -1,0 +1,58 @@
+---
+title: Implement an Interface in Go with the LSP
+summary: Hi there from the summary
+categories: ['Go', 'Tips & Tricks', 'Neovim', 'LSP']
+publishedAt: '30-5-2024'
+published: true
+---
+
+<script>import InfoTip from "$lib/components/InfoTip.svelte"</script>
+
+Have you ever wanted to a simple way to implement a Go interface? If you wanted to do this in the past you would have had to use a tool like `impl` or in Neovim use `vim-go` which had a builtin command using this program.
+
+In recent years this functionality is available directly in the Go LSP `gopls` but it is a little difficult to find. I found this out myself nestled in the comments of a `gopls` feature request on the projects Github Issues page.
+
+## Implementing an interface through a code action
+
+```go
+type Dog interface {
+	Bark()
+}
+
+type Animal struct {
+	name string
+}
+```
+
+To get the code action to appear we need to create a statement that will not compile because of the static type not does not implement the interface
+
+```go
+var dog Dog = Animal{} // error : Animal does not implement Dog (missing method Bark)
+```
+
+<InfoTip>
+
+If you want to implement the method stubs for a pointer type you can use
+
+```go
+var dog Dog = new(Animal)
+```
+
+</InfoTip>
+
+Now hovering the error in neovim and requsting code acions from the LSP you will see the option **Declare missing methods of Dog** and selecting it will result in the following:
+
+```go
+type Animal struct {
+	name string
+}
+
+// Bark implements Dog.
+func (a Animal) Bark() {
+	panic("unimplemented")
+}
+```
+
+### 🎉 TADA 🎉
+
+We have generated the method stubs for the type using just the LSP, no third party tools necessary.

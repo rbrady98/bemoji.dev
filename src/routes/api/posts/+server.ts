@@ -6,11 +6,11 @@ export type APIPost = {
 } & Post['metadata'];
 
 export const GET = async () => {
-	const paths = import.meta.glob<Post>('/src/lib/posts/*.md', { eager: true });
+	const paths = import.meta.glob<Post>('/src/lib/posts/*.mdx', { eager: true });
 
 	const posts: APIPost[] = [];
 	for (const path in paths) {
-		const slug = path.split('/').at(-1)?.replace('.md', '');
+		const slug = path.split('/').at(-1)?.replace('.mdx', '');
 		if (!slug) {
 			continue;
 		}

@@ -15,6 +15,16 @@ export default {
 		extend: {
 			// updating prose headers
 			typography: ({ theme }) => ({
+				DEFAULT: {
+					css: {
+						'code::before': {
+							content: '""'
+						},
+						'code::after': {
+							content: '""'
+						}
+					}
+				},
 				lg: {
 					css: {
 						'--tw-prose-headings': theme('colors.text')

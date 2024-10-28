@@ -5,13 +5,13 @@ import { getHighlighter } from 'shiki';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	extensions: ['.svelte', '.md'],
+	extensions: ['.svelte', '.mdx'],
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
 	preprocess: [
 		vitePreprocess(),
 		mdsvex({
-			extensions: ['.md'],
+			extensions: ['.mdx'],
 			highlight: {
 				highlighter: async (code, lang = 'text') => {
 					const highlighter = await getHighlighter({
