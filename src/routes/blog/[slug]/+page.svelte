@@ -12,6 +12,6 @@
 		{metadata.publishedAt}
 	</h3>
 </div>
-<article class="mt-10 prose prose-lg dark:prose-invert max-w-none">
+<article class="mt-10 mb-10 prose prose-lg dark:prose-invert max-w-none">
 	<Post />
 </article>

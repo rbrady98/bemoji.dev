@@ -1,6 +1,6 @@
 ---
-title: Implement an Interface in Go with the LSP
-summary: Hi there from the summary
+title: Implement an Interface in Go with just the LSP
+summary: If you have ever needed to implement an interface in Go you may have reached for third party tools in the past but thats no longer necessary. In this blog post I'll describe a simple trick to do it directly with the Go Language Server.
 categories: ['Go', 'Tips & Tricks', 'Neovim', 'LSP']
 publishedAt: '30-5-2024'
 published: true
@@ -8,9 +8,11 @@ published: true
 
 <script>import InfoTip from "$lib/components/InfoTip.svelte"</script>
 
-Have you ever wanted to a simple way to implement a Go interface? If you wanted to do this in the past you would have had to use a tool like `impl` or in Neovim use `vim-go` which had a builtin command using this program.
+Have you ever wanted to a simple way to implement a Go interface? If you wanted to do this in the past you would have had to use a tool like <a href="https://github.com/josharian/impl" target="_blank">impl</a> or in Neovim use <a href="https://github.com/ray-x/go.nvim" target="_blank">go.nvim</a> which has a builtin command using this program.
 
-In recent years this functionality is available directly in the Go LSP `gopls` but it is a little difficult to find. I found this out myself nestled in the comments of a `gopls` feature request on the projects Github Issues page.
+In recent years this functionality is available directly in the Go LSP gopls but it is a little difficult to find. I found this out myself nestled in the comments of a gopls <a href="https://github.com/golang/go/issues/60290" target="_blank">feature request on the projects Github Issues page</a>.
+
+This method will work for both VS Code and Neovim granted you have the language server setup already.
 
 ## Implementing an interface through a code action
 
@@ -24,7 +26,7 @@ type Animal struct {
 }
 ```
 
-To get the code action to appear we need to create a statement that will not compile because of the static type not does not implement the interface
+To get the code action to appear we need to create a statement that will not compile because of the static type not does not implement the interface.
 
 ```go
 var dog Dog = Animal{} // error : Animal does not implement Dog (missing method Bark)
@@ -32,7 +34,7 @@ var dog Dog = Animal{} // error : Animal does not implement Dog (missing method 
 
 <InfoTip>
 
-If you want to implement the method stubs for a pointer type you can use
+If you want to implement the method stubs for a pointer type you can use.
 
 ```go
 var dog Dog = new(Animal)
