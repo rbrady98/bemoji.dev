@@ -16,7 +16,7 @@ export const GET = async () => {
 		}
 
 		const post = { slug, ...paths[path].metadata };
-		post.published && posts.push(post);
+		(post.published || !import.meta.env.PROD) && posts.push(post);
 	}
 
 	return json(posts);

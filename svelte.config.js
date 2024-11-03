@@ -1,7 +1,7 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { escapeSvelte, mdsvex } from 'mdsvex';
-import { getHighlighter } from 'shiki';
+import { getSingletonHighlighter } from 'shiki';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -14,7 +14,7 @@ const config = {
 			extensions: ['.mdx'],
 			highlight: {
 				highlighter: async (code, lang = 'text') => {
-					const highlighter = await getHighlighter({
+					const highlighter = await getSingletonHighlighter({
 						themes: ['catppuccin-mocha', 'catppuccin-latte'],
 						langs: ['javascript', 'typescript', 'go', 'bash', 'svelte']
 					});
