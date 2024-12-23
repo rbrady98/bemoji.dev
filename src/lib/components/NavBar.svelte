@@ -1,19 +1,20 @@
 <script lang="ts">
 	import Linkedin from 'lucide-svelte/icons/linkedin';
 	import Github from 'lucide-svelte/icons/github';
-	import type { Component } from 'svelte';
+	import type { Icon as IconType } from 'lucide-svelte';
 
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import ThemeButton from '$lib/components/ThemeButton.svelte';
 </script>
 
-{#snippet navLink(href: string, itemBody: string | Component)}
-	<li class={$page.url.pathname === href ? 'text-accent font-bold m-3' : 'm-3 hover:opacity-60'}>
+{#snippet navLink(href: string, itemBody: string | typeof IconType)}
+	<li class={page.url.pathname === href ? 'text-accent font-bold m-3' : 'm-3 hover:opacity-60'}>
 		<a {href}>
 			{#if typeof itemBody === 'string'}
 				{itemBody}
 			{:else}
-				<svelte:component this={itemBody} />
+				{@const Icon = itemBody}
+				<Icon />
 			{/if}
 		</a>
 	</li>
