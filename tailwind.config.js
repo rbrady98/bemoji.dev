@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: ['./src/**/*.{html,js,svelte,ts}'],
+	content: ['./src/**/*.{html,js,svelte,ts,mdx}'],
 	darkMode: 'class',
 	theme: {
 		colors: {
@@ -36,6 +36,22 @@ export default {
 					}
 				}
 			})
+		},
+		animation: {
+			blob: 'blob 20s linear infinite',
+			'reverse-blob': 'reverse-blob 20s linear infinite'
+		},
+		keyframes: {
+			blob: {
+				'0%': { transform: 'rotate(0deg)' },
+				'50%': { scale: '1 2' },
+				'100%': { transform: 'rotate(360deg)' }
+			},
+			'reverse-blob': {
+				'0%': { transform: 'rotate(0deg)' },
+				'50%': { scale: '1 1.5' },
+				'100%': { transform: 'rotate(-360deg)' }
+			}
 		}
 	},
 	plugins: [require('@tailwindcss/typography')]

@@ -1,0 +1,216 @@
+---
+title: Using Go generics to handle optional JSON fields
+summary: 
+categories: ['Go', 'Tips & Tricks', 'JSON', 'Generics']
+publishedAt: '3-11-2024'
+published: false
+---
+
+<script>import InfoTip from "$lib/components/InfoTip.svelte"</script>
+
+Recently at work I needed to implement a simple JSON endpoint to update some data in a database, when thinking of the implementation details and how the endpoint will be used I wanted the endpoint to support partial updates of the objects, which in the land of REST is called a [PATCH](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH).
+
+In this post we are going to roll our own basic partial updating but if you do need something more well defined and featureful you could use [JSON Patch](https://jsonpatch.com) which is a structured format for defining changes to a JSON document.
+
+I have a personal project scaffold called Steiger which we are going use as a starting point. Steiger is minimal Go server boilerplate with a layered architecture that I use to explore programming concepts and libraries. It currently works as a minimal API for jokes.
+
+## Building out our Update handler
+
+Since we are using a layered architecture I like to start implementing a new feature from the service layer and work outwards to the transport and repository layer.
+
+First let's add a method to our Joke Repository. As a quick aside, in a layered architecture you really see the benefits of following the Go best practice of [defining interfaces on the consumer side](https://dave.cheney.net/practical-go/presentations/gophercon-israel.html#_let_callers_define_the_interface_they_require), not the producer when the Joke Repository is defined in the service layer. We get a clear separatation of the business layer objects and the storage layer objects, we have a minimal interface which describes exactly what our service needs and the service layer is completely separated from the storage layer (notice there are no imports in the service mentioning any storage layer packages). If you arent doing this already I would recommend experimenting with it to try and see the improvement in the separation of concerns.
+
+### Adding the update logic to the service layer.
+```go
+type JokeRepo interface {
+	Get(ctx context.Context, id int) (Joke, error)
+	Create(ctx context.Context, content string, nsfw bool) error
+	List(ctx context.Context) ([]Joke, error)
+	Update(ctx context.Context, id int, content *string, nsfw *bool) (Joke, error) // new Update method
+}
+
+// and the service update method
+func (j *JokeService) UpdateJoke(ctx context.Context, id int, content *string, nsfw *bool) (Joke, error) {
+	return j.repo.Update(ctx, id, joke, nsfw)
+}
+```
+
+Quick and simple here, our service layer method is just passing the parameters through to the new repository interface method method.
+We are using pointers to both the content and and the nsfw flag to indicate that these are optional.
+
+### Catching up our storage layer
+Now for the meat of the update handler, the storage layer. I will say that in my day job I am not often using SQL so if my SQL skills are a little rough I'd like to apologise in advance.
+The update method here is responsable for making the query to the DB (using [SQLx](https://github.com/jmoiron/sqlx)) handling any errors that may have occured and converting our model layer joke into our business layer joke (this feels like it should belong in the service layer but I'm not sure). I'm using SQL's `COALESCE` function here to choose the first non null argument so if for example we provide a null nsfw update it will not be changed.
+
+
+<InfoTip>
+If you want extra compile time assurance that our repo implementation actually implements the interface you can use this handy snippet
+
+```go
+var _ joke.JokeRepo = &SqliteJokeRepo{}
+```
+</InfoTip>
+
+So our update function is going to look like so:
+```go
+func (r *SqliteJokeRepo) Update(ctx context.Context, id int, content *string, nsfw *bool) (joke.Joke, error) {
+	var j JokeModel
+	if err := r.db.GetContext(
+		ctx,
+		&j,
+		`UPDATE jokes as j
+		 SET joke = COALESCE(?, j.joke),
+			 nsfw = COALESCE(?, j.nsfw)
+		 WHERE id = ?
+		 RETURNING *;
+		`,
+		content,
+		nsfw,
+		id,
+	); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return joke.Joke{}, storage.ErrNoRows
+		}
+
+		return joke.Joke{}, err
+	}
+
+	return fromJokeModel(j), nil
+}
+```
+
+### And wrapping it all up in the handler
+The handlers in Steiger may look a little different than you're used to, they are closures that take in their dependencies and return a modified `http.HandlerFunc` that also returns an error, in the routing layer this custom `HandlerFunc` is adapted to a regular `http.HandlerFunc`. The closure allows you to do some setup like defining request structs and the custom handler func allows you to explicitly return errors from http handlers which is a great improvement on the regular http handler DX. You can read more about this pattern in this [blog post](https://grafana.com/blog/2024/02/09/how-i-write-http-services-in-go-after-13-years/) from Matt Ryer
+
+```go
+func UpdateJokesHandler(log *slog.Logger, jokeSvc *joke.JokeService) func(w http.ResponseWriter, r *http.Request) error {
+	type request struct {
+		Joke *string `json:"joke"`
+		Nsfw *bool   `json:"nsfw"`
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) error {
+		IDstr := chi.URLParam(r, "id")
+		ID, err := strconv.Atoi(IDstr)
+		if err != nil {
+			return apperror.New("invalid joke id", http.StatusBadRequest)
+		}
+
+		req, err := codec.Decode[request](r)
+		if err != nil {
+			return apperror.NewFromError(err, http.StatusBadRequest)
+		}
+
+		joke, err := jokeSvc.UpdateJoke(r.Context(), ID, req.Joke, req.Nsfw)
+		if err != nil {
+			return apperror.NewFromError(err, http.StatusInternalServerError)
+		}
+
+		return codec.Encode(w, http.StatusOK, joke)
+	}
+}
+```
+
+### Testing our feature
+Making a couple of test requests to our endpoint we can see that our endpoint is working correctly and that we can partially update our jokes. 
+First let's create a joke in the database
+
+<div class="flex justify-evenly items-center">
+<div>
+
+```bash
+curl --request POST \
+  --url http://localhost:8080/ \
+  --data '{
+  "joke": "what do you call...",
+  "nsfw": true
+}'
+```
+</div>
+
+<div>
+
+```bash
+{
+  "id": 1,
+  "joke": "what do you call...",
+  "nsfw": true,
+  "createdAt": "2024-12-26T16:33:41Z"
+}
+```
+
+</div>
+</div>
+
+Now lets use our new endpoint to update our joke and mark it as not nsfw.
+
+<div class="flex justify-evenly items-center">
+<div>
+
+```bash
+curl --request PATCH \
+  --url http://localhost:8080/1 \
+  --data '{
+  "nsfw": true
+}'
+```
+</div>
+
+<div>
+
+```bash
+{
+  "id": 1,
+  "joke": "what do you call...",
+  "nsfw": false,
+  "createdAt": "2024-12-26T16:33:41Z"
+}
+```
+
+</div>
+</div>
+
+## Not quite perfect
+Our endpoint looks to be working well but if our database was a little different we will run into an issue, can you guess what that issue might be? Well if you guessed that it will be quite difficult to handle nullable SQL columns then you guessed correctly, but why is this?
+
+It is common when working with JSON in Go to use pointers to indicate that something is optional which works well when something cannot be nil but what if nil is a valid value for the field? Since Go has zero-value semantics we cannot indicate that something is undefined like we can in Javascript or in Rust with `Option`. So we need a way to be able to indicate that a value can be nil and defined and for this we can look at a certain type in the  `database/sql` package.
+
+In the `database/sql` package there are types defined for the exact problem that we are facing and these all follow the naming convention `sql.Null***` where `***` are types such as `sql.NullString`, `sql.NullBool` and so on. Let's look at their implementation:
+```go
+type NullString struct {
+	String string
+	Valid  bool // Valid is true if String is not NULL
+}
+```
+How wonderfully simple, this type just has a boolean flag to indicate whether the base type has been set or not. This looks like it solves the problem that we are having, while the idea behind it does solve our issue we need to make some changes.
+
+## A JSON Optional
+Basing our solution on the `NullString` type, lets set some requirements for our type:
+* One type to handle all optional fields
+* Can be unmarshaled to JSON
+* Can differentiate between nil and undefined
+
+Let's look at the implementation of our `Optional` type and see whether it solves our requirements
+```go
+type Optional[T any] struct {
+	Valid bool
+	Value T
+}
+
+// UnmarshalJSON implements the Unmarshaler interface from the encoding/json package
+func (o *Optional[T]) UnmarshalJSON(b []byte) error {
+	if err := json.Unmarshal(b, &o.Value); err != nil {
+		return err
+	}
+
+	o.Valid = true
+
+	return nil
+}
+```
+
+The `Optional` type accepts a type parameter so that it can be used to store any value but still retain its type information so our first requirement can be checked off.
+
+The `Optional` type implements the `Unmarshaler` interface so we can use the standard JSON packages with our type, requirement two; check.
+
+And for our final requirement we need a little understanding of when UnmarshalJSON is called. When unmarshaling into our structs, the methods decoding the JSON (`json.Unmarshal()/Decoder.Decode()`) will check if our type implements the Unmarshaler interface and if it does Go will call our UnmarshalJSON method but it only does this if a matching field name is found in the input. So if we dont supply the field name for the optional field in our JSON body then the nothing will happen in the field and most importantly it will be initialised with the **zero value**. So basically, if you provide the field in the JSON body then `Optional.Valid` will be true otherwise it will be false and we are now able to differentiate between nil and undefined.
