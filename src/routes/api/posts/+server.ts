@@ -1,9 +1,7 @@
 import { json } from '@sveltejs/kit';
-import type { Post } from '../../types';
+import type { Post, APIPost } from '$lib/types';
 
-export type APIPost = {
-	slug: string;
-} & Post['metadata'];
+export type { APIPost };
 
 export const GET = async () => {
 	const paths = import.meta.glob<Post>('/src/lib/posts/*.mdx', { eager: true });
@@ -16,7 +14,7 @@ export const GET = async () => {
 		}
 
 		const post = { slug, ...paths[path].metadata };
-		(post.published || !import.meta.env.PROD) && posts.push(post);
+		if (post.published || !import.meta.env.PROD) posts.push(post);
 	}
 
 	return json(posts);

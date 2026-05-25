@@ -1,28 +1,31 @@
-<script>
+<script lang="ts">
 	const { children } = $props();
 	import BadgeInfo from 'lucide-svelte/icons/badge-info';
 </script>
 
-<section class="ml-5 relative border-l-4 after:bg-accent border-accent w-auto md:w-1/2 p-2">
-	<div id="icon-box" class="absolute z-50 text-accent -top-4 -left-[26px]">
-		<BadgeInfo size={48} class="fill-background" />
+<aside class="info-callout">
+	<div class="callout-badge">
+		<BadgeInfo size={48} color="var(--primary)" fill="var(--bg-color)" />
 	</div>
-	<div class="pl-4">
+	<div class="">
 		{@render children?.()}
 	</div>
-</section>
+</aside>
 
 <style>
-	section:after {
-		content: '';
-		z-index: 10;
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		opacity: 0.1;
-		border-radius: 0 0.5rem 0.5rem 0;
+	.info-callout {
+		position: relative;
+		margin-inline-start: 1.5rem;
+		padding-block: 1.5rem;
+		padding-inline: 3rem 1.5rem;
+		background-color: hsl(from var(--primary) h s 30%);
+		border-inline-start: 4px solid var(--primary);
+		border-radius: var(--border-radius);
+
+		& .callout-badge {
+			position: absolute;
+			top: -13px;
+			left: -26px;
+		}
 	}
 </style>

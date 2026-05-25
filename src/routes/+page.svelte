@@ -1,47 +1,37 @@
 <script lang="ts">
-	import Blob from '$lib/components/Blob.svelte';
-	import NavBar from '$lib/components/NavBar.svelte';
-
 	const { data } = $props();
 </script>
 
-<Blob />
+<div class="wrapper flow">
+	<section>
+		<h1>Hi, I'm Rían</h1>
+		<p>
+			I'm a software engineer from Ireland.<br />Interested in Go, Svelte, Neovim and keyboard-based
+			development.<br />Writing about learning, projects and mistakes.
+		</p>
+	</section>
 
-<NavBar />
+	<h5 class="">Latest blog posts</h5>
 
-<div class="pt-12 pb-12 max-w-5xl mx-auto px-4">
-	<div class="z-10 relative">
-		<section>
-			<h1 class="font-bold text-8xl tracking-tighter py-7">Hi, I'm Rían</h1>
-			<h3 class="text-lg">I'm a software engineer from Ireland.</h3>
-			<h3 class="text-lg">Interested in Go, Svelte, Neovim and keyboard-based development</h3>
-			<h3 class="text-lg">Writing about learning, projects and mistakes.</h3>
-		</section>
-
-		<h1 class="mt-10 font-semibold text-xl text-accent">Latest blog posts</h1>
-
-		{#if data.posts.length === 0}
-			<h1 class="text-lg">Well... There aren't any.</h1>
-		{:else}
-			<section>
-				{#each data.posts as post}
-					<article class="group mt-10 flex flex-col">
+	{#if data.posts.length === 0}
+		<p class="">Well... There aren't any.</p>
+	{:else}
+		<section style="margin-bottom: var(--spacing);">
+			{#each data.posts as post (post.slug)}
+				<article class="flow">
+					<h3>
 						<a href={`/blog/${post.slug}`}>
-							<h1 class="text-2xl font-semibold group-hover:text-secondary">{post.title}</h1>
-							<h1 class="text-lg mt-4">{post.summary}</h1>
-							<div class="flex gap-2 mt-4">
-								{#each post.categories as category}
-									<span
-										class="flex justify-center font-semibold p-1 min-w-12 rounded-md bg-secondary/20 border-b-2 border-secondary/50"
-									>
-										{category}
-									</span>
-								{/each}
-							</div>
+							{post.title}
 						</a>
-					</article>
-				{/each}
-			</section>
-		{/if}
-	</div>
+					</h3>
+					<p>{post.summary}</p>
+					<ul class="category-list">
+						{#each post.categories as category (category)}
+							<li>{category}</li>
+						{/each}
+					</ul>
+				</article>
+			{/each}
+		</section>
+	{/if}
 </div>

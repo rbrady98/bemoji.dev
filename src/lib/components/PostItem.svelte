@@ -1,20 +1,45 @@
 <script lang="ts">
-	import type { APIPost } from '../../routes/api/posts/+server';
+	import type { APIPost } from '$lib/types';
 	import SquareChevronRight from 'lucide-svelte/icons/square-chevron-right';
 
 	const { post }: { post: APIPost } = $props();
 </script>
 
-<a
-	href={`/blog/${post.slug}`}
-	class="group flex flex-col my-12 p-2 bg-gradient-to-r from-accent via-primary to-secondary bg-[length:100%_2px] bg-no-repeat bg-bottom gap-2"
->
-	<div class="flex items-center">
-		<SquareChevronRight
-			class="size-4 stroke-accent transition-transform group-hover:translate-x-1 hidden md:block"
-		/>
-		<h1 class="text-xl font-bold md:ml-2 group-hover:text-secondary">{post.title}</h1>
+<article>
+	<a href={`/blog/${post.slug}`} aria-label={post.title}></a>
+	<div>
+		<SquareChevronRight class="chevron" />
+		<h3>
+			<a href={`/blog/${post.slug}`}>
+				{post.title}
+			</a>
+		</h3>
 	</div>
-	<p class="text-text/90">{post.summary}</p>
-	<p class="text-right">{post.publishedAt}</p>
-</a>
+	<p>{post.summary}</p>
+	<p>{post.publishedAt}</p>
+</article>
+
+<style>
+	article {
+		display: flex;
+		gap: var(--spacing);
+		flex-direction: column;
+	}
+	div {
+		display: flex;
+		align-items: center;
+		gap: var(--spacing);
+	}
+
+	p {
+		font-size: var(--fs-300);
+	}
+
+	:global(.chevron) {
+		transition: transform 0.2s ease;
+	}
+
+	article:hover :global(.chevron) {
+		transform: translateX(4px);
+	}
+</style>

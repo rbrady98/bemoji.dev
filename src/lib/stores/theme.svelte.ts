@@ -1,39 +1,22 @@
 import { browser } from '$app/environment';
 
-function createThemeToggle() {
-	let dark = false;
-	if (browser) {
-		if (
-			localStorage.theme === 'dark' ||
-			(!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-		) {
-			dark = true;
-			document.documentElement.classList.add('dark');
-		} else {
-			document.documentElement.classList.remove('dark');
+class ThemeToggle {
+	isDark = $state(false);
+
+	constructor() {
+		if (browser) {
+			this.isDark =
+				localStorage.theme === 'dark' ||
+				(!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+			document.documentElement.classList.toggle('dark', this.isDark);
 		}
 	}
 
-	let isDark = $state(dark);
-
-	function toggle() {
-		if (isDark) {
-			isDark = false;
-			document.documentElement.classList.remove('dark');
-			localStorage.setItem('theme', 'light');
-		} else {
-			isDark = true;
-			document.documentElement.classList.add('dark');
-			localStorage.setItem('theme', 'dark');
-		}
+	toggle() {
+		this.isDark = !this.isDark;
+		document.documentElement.classList.toggle('dark', this.isDark);
+		localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
 	}
-
-	return {
-		get isDark() {
-			return isDark;
-		},
-		toggle
-	};
 }
 
-export const themeToggle = createThemeToggle();
+export const themeToggle = new ThemeToggle();

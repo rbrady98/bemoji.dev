@@ -22,7 +22,7 @@ const config = {
 					const html = escapeSvelte(
 						highlighter.codeToHtml(code, {
 							lang,
-							themes: { dark: 'catppuccin-mocha', light: 'catppuccin-latte' }
+							theme: 'catppuccin-mocha'
 						})
 					);
 					return `{@html \`${html}\` }`;

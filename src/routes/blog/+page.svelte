@@ -3,38 +3,57 @@
 
 	const { data } = $props();
 
-	const categories = data.posts.reduce<string[]>((acc, curr) => {
-		acc.push(...curr.categories);
-		return acc;
-	}, []);
+	const categories = $derived([...new Set(data.posts.flatMap((p) => p.categories))]);
 </script>
 
 {#if data.posts.length === 0}
-	<h1 class="text-4xl">Tumbleweeds...</h1>
+	<h1 class="">Tumbleweeds...</h1>
 {:else}
-	<div class="flex flex-col-reverse md:flex-row">
-		<section class="mt-10 md:m-0">
-			<h1 class="text-4xl font-bold tracking-tight">Latest</h1>
-			<ul class="mt-10">
-				{#each data.posts as post}
+	<div class="wrapper columns">
+		<section>
+			<h1>Posts</h1>
+			<ul class="unstyled-list">
+				{#each data.posts as post (post.slug)}
 					<li>
 						<PostItem {post} />
 					</li>
 				{/each}
 			</ul>
 		</section>
+
 		<section>
-			<h1 class="text-4xl font-bold tracking-tight">Categories</h1>
-			<div class="flex flex-wrap gap-3 mt-4">
-				{#each categories as category}
-					<a
-						href={`blog/category/${category}`}
-						class="flex justify-center font-semibold p-1 min-w-12 rounded-md bg-accent/40 transition-transform duration-200 hover:scale-110 hover:bg-accent/60"
-					>
-						{category}
-					</a>
+			<h2 style="margin-bottom: var(--spacing)">Categories</h2>
+			<ul class="category-list flex-wrap">
+				{#each categories as category (category)}
+					<li>
+						<a href={`blog/category/${category}`} style="text-decoration: none;">
+							{category}
+						</a>
+					</li>
 				{/each}
-			</div>
+			</ul>
 		</section>
 	</div>
 {/if}
+
+<style>
+	.columns {
+		display: flex;
+		flex-wrap: wrap;
+		gap: calc(var(--spacing) * 2);
+
+		& > :first-child {
+			flex-grow: 3;
+			flex-basis: 400px;
+		}
+
+		& > :last-child {
+			flex-grow: 1;
+			flex-basis: 200px;
+		}
+	}
+
+	.flex-wrap {
+		flex-wrap: wrap;
+	}
+</style>

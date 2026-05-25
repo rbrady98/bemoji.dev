@@ -1,4 +1,4 @@
-import type { Post } from '../../types';
+import type { Post } from '$lib/types';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ params }) => {
